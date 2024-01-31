@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+    <title>Todo List</title>
+</head>
+
+<body>
+    <style>
+        .centered-div {
+          text-align: center;
+          display: inline-block;
+          width: 150%; /* Adjust the width as needed */
+          margin: 0 10px; /* Add margin between items */
+          vertical-align: top; /* Align items to the top */
+          background-color: #696d97;;
+          margin-top: 20px;
+          border-radius: 10px;
+        }
+        .button{
+          border: none;
+          background-color: transparent;
+          color: cyan;
+        }
+      
+        .roomList__header {
+          text-align: center;
+          margin-left: 120px;
+          font-size: large;
+          width: 100px;
+        }
+      
+        .add-todo-btn {
+          display: block;
+          width: 150%;
+          margin: 20px 10px; /* Center the button */
+        }
+    </style>
+    {% include 'navbar.html' %}
+    {% block content %}
+
+
+    {% endblock %}
+
+    <script src="{% static 'js/script.js' %}"></script>
+    
+<script>
+    function updateStatus() {
+        var todoId = 1;  // Replace with the actual ID of the todo item you want to update
+        fetch(`/update_status/${todoId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',  // Add this line to include the CSRF token
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Status updated successfully!');
+            } else {
+                alert('Failed to update status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating status.');
+        });
+    }
+    </script>
+</body>
+
+</html>
